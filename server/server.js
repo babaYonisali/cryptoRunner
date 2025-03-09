@@ -11,7 +11,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Update static file serving - fix path to point to the correct directory
+// Serve static files from the root directory
 app.use(express.static(path.join(__dirname, '../')));
 
 // MongoDB connection
@@ -71,9 +71,11 @@ app.post('/api/verify-signature', async (req, res) => {
     }
 });
 
-// Update the catch-all route to use the correct path
+// Update the catch-all route to serve index.html
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../index.html'));
+    if (!req.path.startsWith('/api/')) {
+        res.sendFile(path.join(__dirname, '../index.html'));
+    }
 });
 
 const PORT = process.env.PORT || 8000;
