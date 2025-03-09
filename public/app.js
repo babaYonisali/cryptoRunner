@@ -1,3 +1,6 @@
+// Game constants and configurations
+const SIGN_MESSAGE = "Welcome to Crypto Runner! Please sign this message to verify your wallet.";
+
 let gameSpeed = 5;
 let board;
 const MAX_GAME_SPEED = 8; 
