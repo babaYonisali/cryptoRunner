@@ -1,0 +1,79 @@
+{
+    "questions": [
+        {
+            "question": "What does PnL stand for in trading?",
+            "choices": ["Profit and Loss", "Price and Liquidity", "Position and Leverage"],
+            "answer": "1"
+        },
+        {
+            "question": "Which blockchain is known for its fast and low-cost transactions?",
+            "choices": ["Ethereum", "Bitcoin", "Solana"],
+            "answer": "3"
+        },
+        {
+            "question": "What does 'alpha' refer to in trading?",
+            "choices": ["Market inefficiencies", "First-mover advantage", "Trading signals that outperform the market"],
+            "answer": "3"
+        },
+        {
+            "question": "What is a rug pull in crypto trading?",
+            "choices": ["A type of leverage strategy", "A scam where developers abandon a project", "A term for sudden market correction"],
+            "answer": "2"
+        },
+        {
+            "question": "Which on-chain metric indicates active user engagement?",
+            "choices": ["TVL", "Daily Active Addresses", "Hash Rate"],
+            "answer": "2"
+        },
+        {
+            "question": "Which protocol is the best known for decentralized trading?",
+            "choices": ["Raydium", "Jito", "Chainlink"],
+            "answer": "1"
+        },
+        {
+            "question": "What is slippage in trading?",
+            "choices": ["A sudden market drop", "Difference between expected and actual trade price", "A temporary halt in trading"],
+            "answer": "2"
+        },
+        {
+            "question": "What does 'liquidity' refer to in trading?",
+            "choices": ["Availability of funds to trade", "Speed of transaction execution", "Size of a trading position"],
+            "answer": "1"
+        },
+        {
+            "question": "Which order type executes immediately at the best available price?",
+            "choices": ["Limit Order", "Market Order", "Stop-Loss Order"],
+            "answer": "2"
+        },
+        {
+            "question": "What is TVL (Total Value Locked) in DeFi?",
+            "choices": ["Total amount of funds in a protocol", "The highest recorded market price", "Liquidity of a token pair"],
+            "answer": "1"
+        },
+        {
+            "question": "Which of these factors affects gas fees the most?",
+            "choices": ["Network congestion", "Block size", "Token price"],
+            "answer": "1"
+        },
+        {
+            "question": "What does MEV (Miner Extractable Value) refer to?",
+            "choices": ["Profits miners make from reordering transactions", "The cost of executing a smart contract", "The market value of a token"],
+            "answer": "1"
+        },
+        {
+            "question": "Which trading strategy is commonly used for short-term price movements?",
+            "choices": ["Scalping", "Hodling", "Dollar-cost averaging"],
+            "answer": "1"
+        },
+        {
+            "question": "What does an airdrop in crypto typically involve?",
+            "choices": ["A giveaway of tokens", "A liquidity event", "A token burn"],
+            "answer": "1"
+        },
+        {
+            "question": "Which type of trading involves using borrowed funds?",
+            "choices": ["Margin Trading", "Spot Trading", "OTC Trading"],
+            "answer": "1"
+        }
+    ]
+}
