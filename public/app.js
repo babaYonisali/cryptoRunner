@@ -1,5 +1,5 @@
 // Game constants and configurations
-const SIGN_MESSAGE = "Welcome to Crypto Runner! Please sign this message to verify your wallet.";
+const SIGN_MESSAGE = "Welcome to Crypto Bull Runner! Please sign this message to verify your wallet.";
 
 let gameSpeed = 5;
 let board;
@@ -337,7 +337,7 @@ function showConnectionOptions() {
     
     // Welcome and description - positioned higher up
     context.font = "bold 16px PressStart2P";
-    context.fillText("Welcome to Crypto Runner!", boardWidth/2, 50);
+    context.fillText("Welcome to Crypto Bull Runner!", boardWidth/2, 50);
     
     context.font = "bold 12px PressStart2P";
     context.fillText("Dodge obstacles, collect bitcoins, answer questions!", boardWidth/2, 80);
@@ -478,11 +478,6 @@ async function update() {
     
     // Draw the dino sprite
     context.drawImage(currentDino, dino.x, dino.y, dino.width, dino.height);
-    
-    // Draw red square around dino (for debugging hitbox)
-    context.strokeStyle = 'red';
-    context.lineWidth = 2;
-    context.strokeRect(dino.x, dino.y, dino.width, dino.height);
     
     if (gameOver) {
         // Game over screen
