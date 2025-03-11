@@ -8,7 +8,7 @@ let boardWidth = 750;
 let boardHeight = 250;
 let context;
 
-let dinoWidth=43;
+let dinoWidth=48;
 let dinoHeight=51;
 let duckedDinoWidth = 55;
 let duckedDinoHeight = 30;
