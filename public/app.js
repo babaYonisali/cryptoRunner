@@ -227,7 +227,7 @@ window.onload = async function() {
 
         // Load ground image as background
         groundImage = new Image();
-        groundImage.src = "assets/ground.png";
+        groundImage.src = "assets/ground.jpeg";
 
         // Preload all images
         dinoImage1 = new Image();
