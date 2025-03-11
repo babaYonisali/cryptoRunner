@@ -44,7 +44,6 @@ document.addEventListener('keydown', function(event) {
             playerScore = 0;
             gameSpeed = 5;
             cacti = [];
-            clouds = [];
             ptero = [];
             dino.y = dinoY;
             dino.velocityY = 0;
@@ -96,11 +95,6 @@ const PTERO_HEIGHT = 31;
 let groundImage;
 let groundY = boardHeight - 30;  // 30 units up from bottom
 let groundX = 0;  // Track ground position
-
-let clouds = [];  // Array to store active clouds
-let cloudImage;
-let lastCloudTime = 0;
-const CLOUD_SPAWN_INTERVAL = 3500;  // 5000ms = 5 seconds, same as your Python timer
 
 let playerScore = 0;
 let gameOver = false;
@@ -231,7 +225,7 @@ window.onload = async function() {
         
         setupCanvas();
 
-        // Load ground image
+        // Load ground image as background
         groundImage = new Image();
         groundImage.src = "assets/ground.png";
 
@@ -261,15 +255,7 @@ window.onload = async function() {
             cactusImages.push(cactusImg);
         }
 
-        cloudImage = new Image();
-        cloudImage.src = "assets/cloud.png";
-
-        gameFont = new FontFace('PressStart2P', 'url(assets/PressStart2P-Regular.ttf)');
-        gameFont.load().then(function(loadedFont) {
-            document.fonts.add(loadedFont);
-        });
-        
-        // Add bitcoin image loading
+        // Load bitcoin image
         bitcoinImage = new Image();
         bitcoinImage.src = "assets/bitcoin.png";
         
@@ -283,23 +269,23 @@ window.onload = async function() {
         });
         
         // Wait for all images to load
-        Promise.all([
-            new Promise(resolve => groundImage.onload = resolve),
-            new Promise(resolve => pteroImage1.onload = resolve),
-            new Promise(resolve => pteroImage2.onload = resolve),
+        await Promise.all([
             new Promise(resolve => dinoImage1.onload = resolve),
             new Promise(resolve => dinoImage2.onload = resolve),
             new Promise(resolve => dinoDuck1.onload = resolve),
             new Promise(resolve => dinoDuck2.onload = resolve),
-            new Promise(resolve => cloudImage.onload = resolve),
+            new Promise(resolve => pteroImage1.onload = resolve),
+            new Promise(resolve => pteroImage2.onload = resolve),
+            new Promise(resolve => groundImage.onload = resolve),
             new Promise(resolve => bitcoinImage.onload = resolve),
+            // Load all cactus images
             ...cactusImages.map(img => new Promise(resolve => img.onload = resolve))
-        ]).then(() => {
-            // Load initial leaderboard data
-            updateLeaderboard();
-            // Then show connection options
-            showConnectionOptions();
-        });
+        ]);
+
+        // Load initial leaderboard data
+        updateLeaderboard();
+        // Then show connection options
+        showConnectionOptions();
     } catch (error) {
         console.error('Error loading questions:', error);
     }
@@ -397,15 +383,15 @@ async function update() {
     
     context.clearRect(0, 0, boardWidth, boardHeight);
     
-    // Update ground position
+    // Update ground position for scrolling background
     groundX -= gameSpeed;
     if (groundX <= -boardWidth) {
         groundX = 0;
     }
     
-    // Draw ground with two images for seamless scrolling
-    context.drawImage(groundImage, groundX, groundY, boardWidth, 10);
-    context.drawImage(groundImage, groundX + boardWidth, groundY, boardWidth, 10);
+    // Draw ground as full background with two images for seamless scrolling
+    context.drawImage(groundImage, groundX, 0, boardWidth, boardHeight);
+    context.drawImage(groundImage, groundX + boardWidth, 0, boardWidth, boardHeight);
     
     // Spawn new cactus
     const currentTime = Date.now();
@@ -431,19 +417,6 @@ async function update() {
         // context.strokeRect(cactus.x, cactus.y, cactus.width, cactus.height);
 
         return cactus.x > -CACTUS_WIDTH;  // Keep if still on screen
-    });
-    
-    // Spawn new clouds
-    if (currentTime - lastCloudTime >= CLOUD_SPAWN_INTERVAL) {
-        clouds.push(spawnCloud());
-        lastCloudTime = currentTime;
-    }
-    
-    // Update and draw clouds (do this before drawing ground and other elements)
-    clouds = clouds.filter(cloud => {
-        cloud.x -= cloud.speed;
-        context.drawImage(cloudImage, cloud.x, cloud.y, cloud.width, cloud.height);
-        return cloud.x > -cloud.width;  // Keep if still on screen
     });
     
     // Apply gravity and update position
@@ -591,18 +564,6 @@ function spawnCactus() {
         height: CACTUS_HEIGHT,
         image: cactusImages[Math.floor(Math.random() * 6)],  // Random cactus type
         speed: gameSpeed  // Pixels per frame
-    };
-}
-
-// Add cloud spawning function
-function spawnCloud() {
-    const size = Math.random() * (150 - 70) + 70; // Random size between 150 and 250
-    return {
-        x: boardWidth,
-        y: Math.random() * (100 - 20) + 20,  // Random height between 100 and 200
-        width: size,
-        height: size / 2,
-        speed: gameSpeed * 0.5  // Clouds move slower than the ground
     };
 }
 
