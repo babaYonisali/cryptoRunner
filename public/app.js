@@ -225,7 +225,7 @@ window.onload = async function() {
         
         setupCanvas();
 
-        // Load ground image
+        // Load ground image as background
         groundImage = new Image();
         groundImage.src = "assets/ground.png";
 
@@ -383,15 +383,15 @@ async function update() {
     
     context.clearRect(0, 0, boardWidth, boardHeight);
     
-    // Update ground position
+    // Update ground position for scrolling background
     groundX -= gameSpeed;
     if (groundX <= -boardWidth) {
         groundX = 0;
     }
     
-    // Draw ground with two images for seamless scrolling
-    context.drawImage(groundImage, groundX, groundY, boardWidth, 10);
-    context.drawImage(groundImage, groundX + boardWidth, groundY, boardWidth, 10);
+    // Draw ground as full background with two images for seamless scrolling
+    context.drawImage(groundImage, groundX, 0, boardWidth, boardHeight);
+    context.drawImage(groundImage, groundX + boardWidth, 0, boardWidth, boardHeight);
     
     // Spawn new cactus
     const currentTime = Date.now();
