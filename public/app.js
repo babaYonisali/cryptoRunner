@@ -223,6 +223,29 @@ window.onload = async function() {
         questions = data.questions;
         
         setupCanvas();
+        
+        // Add touch event listener for mobile devices
+        board.addEventListener('touchstart', function(event) {
+            event.preventDefault(); // Prevent default behavior like scrolling
+            
+            // Simulate space key press
+            if (gameOver) {
+                // Reset game on touch when game over
+                gameOver = false;
+                scoreSaveAttempted = false;
+                playerScore = 0;
+                gameSpeed = 5;
+                cacti = [];
+                ptero = [];
+                dino.y = dinoY;
+                dino.velocityY = 0;
+                dino.isJumping = false;
+            } else if (!dino.isJumping) {
+                // Jump on touch
+                dino.velocityY = JUMP_FORCE;
+                dino.isJumping = true;
+            }
+        }, { passive: false });
 
         // Load ground image as background
         groundImage = new Image();
@@ -354,20 +377,35 @@ function drawButton(text, x, y, callback) {
     context.font = "bold 14px PressStart2P";
     context.fillText(text, x, y + 5);
     
-    // Add click handler
-    board.addEventListener("click", function handleClick(event) {
+    // Function to handle both click and touch
+    const handleInteraction = function(event) {
+        event.preventDefault();
         const rect = board.getBoundingClientRect();
-        const clickX = event.clientX - rect.left;
-        const clickY = event.clientY - rect.top;
         
-        if (clickX >= x - buttonWidth/2 && 
-            clickX <= x + buttonWidth/2 && 
-            clickY >= y - buttonHeight/2 && 
-            clickY <= y + buttonHeight/2) {
-            board.removeEventListener("click", handleClick);
+        // Get position based on event type
+        let posX, posY;
+        if (event.type === 'touchstart') {
+            posX = event.touches[0].clientX - rect.left;
+            posY = event.touches[0].clientY - rect.top;
+        } else {
+            posX = event.clientX - rect.left;
+            posY = event.clientY - rect.top;
+        }
+        
+        if (posX >= x - buttonWidth/2 && 
+            posX <= x + buttonWidth/2 && 
+            posY >= y - buttonHeight/2 && 
+            posY <= y + buttonHeight/2) {
+            // Remove both event listeners
+            board.removeEventListener("click", handleInteraction);
+            board.removeEventListener("touchstart", handleInteraction);
             callback();
         }
-    });
+    };
+    
+    // Add both click and touch handlers
+    board.addEventListener("click", handleInteraction);
+    board.addEventListener("touchstart", handleInteraction, { passive: false });
 }
 
 function startGame() {
@@ -621,14 +659,32 @@ function showQuizPopup() {
         }
 
         let choicesHTML = '';
+        let answerButtons = '';
         if (selectedQuestion.choices) {
             choicesHTML = selectedQuestion.choices.map((choice, index) => 
                 `<p>Choice ${index + 1}: ${choice}</p>`
             ).join('');
+            
+            // Simple buttons for touch devices
+            answerButtons = `
+                <div style="display: flex; justify-content: space-around; margin-top: 15px;">
+                    <button class="answer-btn" data-answer="1" style="padding: 10px 20px; background: #ff8c00; color: white; border: none; border-radius: 5px;">1</button>
+                    <button class="answer-btn" data-answer="2" style="padding: 10px 20px; background: #ff8c00; color: white; border: none; border-radius: 5px;">2</button>
+                    <button class="answer-btn" data-answer="3" style="padding: 10px 20px; background: #ff8c00; color: white; border: none; border-radius: 5px;">3</button>
+                </div>
+            `;
         } else {
             choicesHTML = `
                 <p>Choice 1: True</p>
                 <p>Choice 2: False</p>
+            `;
+            
+            // Simple buttons for touch devices
+            answerButtons = `
+                <div style="display: flex; justify-content: space-around; margin-top: 15px;">
+                    <button class="answer-btn" data-answer="1" style="padding: 10px 20px; background: #ff8c00; color: white; border: none; border-radius: 5px;">1</button>
+                    <button class="answer-btn" data-answer="2" style="padding: 10px 20px; background: #ff8c00; color: white; border: none; border-radius: 5px;">2</button>
+                </div>
             `;
         }
 
@@ -637,11 +693,21 @@ function showQuizPopup() {
             <div style="color: #555;">
                 ${choicesHTML}
             </div>
-            <p style="color: #666; margin-top: 10px;">Press 1, 2${selectedQuestion.choices ? ` or 3` : ''} to answer</p>
+            <p style="color: #666; margin-top: 10px;">Press 1, 2${selectedQuestion.choices ? ` or 3` : ''} to answer or tap a button:</p>
+            ${answerButtons}
         `;
         
         quizPopup.style.display = 'block';
         questionStartTime = Date.now();
+        
+        // Add click event listeners for touch devices
+        const answerBtns = quizPopup.querySelectorAll('.answer-btn');
+        answerBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const answer = this.getAttribute('data-answer');
+                handleAnswer(answer, selectedQuestion.answer);
+            });
+        });
 
         const handleKeyPress = function(e) {
             const key = e.key;
