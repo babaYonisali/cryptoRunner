@@ -1,4 +1,3 @@
-// Game constants and configurations
 const SIGN_MESSAGE = "Welcome to Crypto Bull Runner! Please sign this message to verify your wallet.";
 
 let gameSpeed = 5;
